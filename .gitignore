@@ -1,0 +1,18 @@
+# Compiled output
+out/
+*.class
+
+# Dependencies (downloaded locally, not committed)
+lib/
+
+# Environment / secrets
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+*.iml
+.vscode/
