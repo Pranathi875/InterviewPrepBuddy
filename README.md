@@ -358,14 +358,3 @@ Edit `src/SpacedRepetition.java`:
 3. Update `DatabaseHelper.java` INSERT and SELECT queries to include the new column
 4. Update `schema.sql` so new installations have the column
 
-### Want to add login/authentication?
-See the [Authentication section](#authentication--multi-user) above for Option B steps.
-
-### General tips for AI tools (ChatGPT, Claude, etc.)
-When asking an AI to help you modify this project, paste:
-1. This README (for context)
-2. The specific file you want changed
-3. What you want to add/change
-
-Example prompt:
-> "Here's my Main.java [paste]. I want to add a feature to delete a question by ID. Update the menu and add the method."
