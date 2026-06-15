@@ -369,16 +369,3 @@ When asking an AI to help you modify this project, paste:
 
 Example prompt:
 > "Here's my Main.java [paste]. I want to add a feature to delete a question by ID. Update the menu and add the method."
-
----
-
-## Future Ideas (Phase 2+)
-
-- [ ] Filter reviews by topic
-- [ ] Delete/edit questions
-- [ ] Export data to CSV
-- [ ] Import problems from a file
-- [ ] Web UI version
-- [ ] Cloud database for cross-device sync
-- [x] Login system for multi-user
-- [ ] Difficulty-based review priority
