@@ -69,48 +69,9 @@ InterviewPrepBuddy/
 
 ---
 
-## Setup — macOS
 
-### Prerequisites
-- Java 17+ (`java --version` to check)
-- Homebrew (for installing MySQL)
 
-### Steps
-
-```bash
-# 1. Navigate to project
-cd ~/AndroidStudioProjects/InterviewPrepBuddy
-
-# 2. Install and start MySQL
-brew install mysql
-brew services start mysql
-
-# 3. Create the database and tables
-mysql -u root < schema.sql
-
-# 4. Download the JDBC driver
-mkdir -p lib
-curl -L -o lib/mysql-connector-j.jar "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.1.0/mysql-connector-j-9.1.0.jar"
-
-# 5. Set your MySQL credentials (if your MySQL has a password)
-cp .env.example .env
-# Then edit .env and set DB_PASSWORD=yourpassword
-
-# 6. Build and run
-chmod +x run.sh
-./run.sh
-```
-
-### To run again later (after reboot)
-```bash
-brew services start mysql   # make sure MySQL is running
-cd ~/AndroidStudioProjects/InterviewPrepBuddy
-./run.sh
-```
-
----
-
-## Setup — Windows
+## Setup 
 
 ### Prerequisites
 - Java 17+ — Download from https://adoptium.net/ (pick Windows x64 .msi)
@@ -160,54 +121,8 @@ javac -cp "lib\*" -d out src\*.java
 java -cp "out;lib\*" Main
 ```
 
-### Optional: Create a run.bat file
-Create a file called `run.bat` in the project root:
-```bat
-@echo off
-echo Compiling...
-mkdir out 2>nul
-javac -cp "lib\*" -d out src\*.java
-if %errorlevel% neq 0 (
-    echo Compilation failed!
-    pause
-    exit /b 1
-)
-echo Starting Interview Prep Buddy...
-java -cp "out;lib\*" Main
-pause
-```
-Then just double-click `run.bat` to start.
 
----
 
-## Setup — Linux
-
-### Steps
-
-```bash
-# 1. Install Java and MySQL
-sudo apt update
-sudo apt install openjdk-17-jdk mysql-server
-
-# 2. Start MySQL and secure it
-sudo systemctl start mysql
-sudo mysql_secure_installation
-
-# 3. Create database
-mysql -u root -p < schema.sql
-
-# 4. Download JDBC driver
-mkdir -p lib
-curl -L -o lib/mysql-connector-j.jar "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.1.0/mysql-connector-j-9.1.0.jar"
-
-# 5. Set MySQL credentials: cp .env.example .env, then edit DB_PASSWORD
-
-# 6. Build and run
-chmod +x run.sh
-./run.sh
-```
-
----
 
 ## Database Schema
 
@@ -317,22 +232,11 @@ This creates the `users` table, adds a `user_id` column, and assigns your existi
 ### "Table doesn't exist"
 - You haven't run `schema.sql` yet
 - Run: `mysql -u root -p < schema.sql`
-
-### Topics showing as duplicates (e.g., "Trees" vs "trees")
-- The topic field is case-sensitive
-- Be consistent with capitalization when adding questions
-- Or change `DatabaseHelper.java` stats query to use `LOWER(q.topic)` for grouping
-
+- 
 ### App won't compile
 - Make sure you have Java 17+: `java --version`
 - Make sure all `.java` files are in the `src/` folder
-
----
-
-## Making Changes (Without Kiro)
-
-If you don't have Kiro available and want to make changes, here's what each file does and how to modify them:
-
+  
 ### Want to change the menu?
 Edit `src/Main.java`:
 - `printMenu()` — what the user sees
