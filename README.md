@@ -1,4 +1,4 @@
-# Interview Prep Buddy — Phase 1 (Console App)
+# Interview Prep Buddy — Phase 1 
 
 ![Java](https://img.shields.io/badge/Java-17-007396?logo=openjdk&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-database-4479A1?logo=mysql&logoColor=white)
