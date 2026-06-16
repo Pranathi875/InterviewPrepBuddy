@@ -9,22 +9,7 @@ A Java console app that helps you practice DSA (Data Structures & Algorithms) us
 
 ---
 
-## Table of Contents
 
-1. [How It Works](#how-it-works)
-2. [Tech Stack](#tech-stack)
-3. [Project Structure](#project-structure)
-4. [Setup — macOS](#setup--macos)
-5. [Setup — Windows (HP laptop, etc.)](#setup--windows)
-6. [Setup — Linux](#setup--linux)
-7. [Database Schema](#database-schema)
-8. [Spaced Repetition Algorithm](#spaced-repetition-algorithm)
-9. [Menu Options Explained](#menu-options-explained)
-10. [Authentication / Multi-User](#authentication--multi-user)
-11. [Common Issues](#common-issues)
-12. [Making Changes (Without Kiro)](#making-changes-without-kiro)
-
----
 
 ## How It Works
 
@@ -70,56 +55,9 @@ InterviewPrepBuddy/
 ---
 
 
-
-## Setup 
-
 ### Prerequisites
 - Java 17+ — Download from https://adoptium.net/ (pick Windows x64 .msi)
 - MySQL — Download from https://dev.mysql.com/downloads/installer/
-
-### Steps
-
-```cmd
-REM 1. Install Java 17 from Adoptium (add to PATH during install)
-
-REM 2. Install MySQL using the MySQL Installer
-REM    - Choose "Developer Default" or "Server Only"
-REM    - Set a root password during setup (remember it!)
-REM    - Make sure MySQL Server is running as a Windows Service
-
-REM 3. Open Command Prompt, navigate to project folder
-cd C:\path\to\InterviewPrepBuddy
-
-REM 4. Run the schema (using MySQL command line client)
-mysql -u root -p < schema.sql
-REM    (enter your password when prompted)
-
-REM 5. Download the JDBC driver
-mkdir lib
-curl -L -o lib\mysql-connector-j.jar "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.1.0/mysql-connector-j-9.1.0.jar"
-REM    OR just download that URL in your browser and save to lib\ folder
-
-REM 6. Set your MySQL credentials
-copy .env.example .env
-REM    Then edit .env and set DB_PASSWORD=yourpassword
-
-REM 7. Compile
-mkdir out
-javac -cp "lib\*" -d out src\*.java
-
-REM 8. Run
-java -cp "out;lib\*" Main
-```
-
-**IMPORTANT for Windows:** The classpath separator is `;` (semicolon), NOT `:` (colon).
-
-### To run again later
-```cmd
-REM Just compile and run (MySQL runs as a service automatically)
-cd C:\path\to\InterviewPrepBuddy
-javac -cp "lib\*" -d out src\*.java
-java -cp "out;lib\*" Main
-```
 
 
 
@@ -168,22 +106,18 @@ The app uses 4 tables in a MySQL database called `interview_prep_buddy`:
 
 Located in `src/SpacedRepetition.java`. Simple logic:
 
-```
+
 When you log an attempt:
   SOLVED_EASILY    → interval = interval × 2  (e.g., 1 → 2 → 4 → 8 → 16 days)
   SOLVED_WITH_HELP → interval stays the same
   COULD_NOT_SOLVE  → interval resets to 1 day
 
 next_review_date = today + new interval
-```
 
-New questions start with `interval = 1` (review tomorrow).
 
----
 
 ## Menu Options Explained
 
-```
 === Menu ===
 1. Add a question         → Enter title, URL, topic, difficulty, notes
 2. List all questions     → Shows everything you've added
@@ -192,73 +126,8 @@ New questions start with `interval = 1` (review tomorrow).
 5. View stats by topic    → Table showing attempts and results per topic
 6. Open question in browser → Opens the LeetCode link in your default browser
 7. Exit
-```
+
 
 ---
 
-## Authentication / Multi-User
-
-The app has a built-in **login and registration** system, so multiple people can use the same database with their own private data.
-
-- On startup you choose **Login** or **Register**.
-- Passwords are hashed with **SHA-256 + a unique random salt** (see `PasswordUtil.java`) — plain-text passwords are never stored.
-- Every question, attempt, and review schedule is tied to a `user_id`, so you only ever see your own data.
-
-### Already have an old single-user database?
-
-If you built this before the user system existed, run the migration script to upgrade without losing data:
-
-```bash
-mysql -u root -p < migrate.sql
-```
-
-This creates the `users` table, adds a `user_id` column, and assigns your existing questions to a default account (username: `admin`, password: `admin`). Log in as `admin` to see your old data, then register your own account.
-
----
-
-## Common Issues
-
-### "Connection refused" or "Access denied"
-- MySQL isn't running. Start it:
-  - macOS: `brew services start mysql`
-  - Windows: Check Services → MySQL is running
-  - Linux: `sudo systemctl start mysql`
-- Wrong password in `DatabaseHelper.java`
-
-### "No suitable driver found"
-- The MySQL connector JAR is missing from `lib/`
-- Re-download it (see setup steps above)
-
-### "Table doesn't exist"
-- You haven't run `schema.sql` yet
-- Run: `mysql -u root -p < schema.sql`
-- 
-### App won't compile
-- Make sure you have Java 17+: `java --version`
-- Make sure all `.java` files are in the `src/` folder
-  
-### Want to change the menu?
-Edit `src/Main.java`:
-- `printMenu()` — what the user sees
-- The `switch` block in `main()` — which method gets called
-- Add new `private static void yourMethod()` for new features
-
-### Want to add a new database query?
-Edit `src/DatabaseHelper.java`:
-- Add a new method following the same pattern (try-with-resources + PreparedStatement)
-- Use `?` placeholders for user input (never concatenate strings into SQL)
-
-### Want to change the spaced repetition logic?
-Edit `src/SpacedRepetition.java`:
-- It's one method with a switch statement
-- Change the multipliers or add new result types
-
-### Want to add a new column to a table?
-1. Run ALTER TABLE in MySQL:
-   ```sql
-   ALTER TABLE questions ADD COLUMN new_column VARCHAR(100);
-   ```
-2. Update the matching POJO (`Question.java`) with the new field + getter/setter
-3. Update `DatabaseHelper.java` INSERT and SELECT queries to include the new column
-4. Update `schema.sql` so new installations have the column
 
